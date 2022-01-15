@@ -62,15 +62,17 @@ export default {
   methods: {
     // 通过编程式路由导航进行路由跳转到搜索页
     goSearch() {
-      this.$router.push({
-        name: 'search',
-        params: {
-          keyword: this.keyword
-        },
-        query: {
-          k: this.keyword.toUpperCase()
-        }
-      })
+      // 判断当前路由是否query参数，如果有，则携带
+      console.log(this.$route.query);
+      if (this.$route.query) {
+        this.$router.push({
+          name: "search",
+          query: this.$route.query,
+          params: {
+            keyword: this.keyword || undefined,
+          },
+        })
+      }
     },
   },
 }

@@ -15,6 +15,10 @@ export default {
   components: {
     Header,
     Footer
+  },
+  mounted() {
+    // 当挂载完毕，派发action，获取三级联动数据（在这里发请求，优化：使请求只发一次）
+    this.$store.dispatch("home/getCategoryList")
   }
 }
 </script>

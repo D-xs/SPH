@@ -1,12 +1,16 @@
 <template>
   <div>
-    Search路由组件
+    <!-- Search路由组件 -->
+    <typeNav/>
   </div>
 </template>
 
 <script>
   export default {
-    name: "Search"
+    name: "Search",
+    created() {
+      console.log(this.$route);
+    }
   }
 </script>
 
