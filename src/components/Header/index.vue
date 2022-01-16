@@ -63,7 +63,7 @@ export default {
     // 通过编程式路由导航进行路由跳转到搜索页
     goSearch() {
       // 判断当前路由是否query参数，如果有，则携带
-      console.log(this.$route.query);
+      console.log(this.$route.query)
       if (this.$route.query) {
         this.$router.push({
           name: "search",
@@ -74,7 +74,18 @@ export default {
         })
       }
     },
+    clearKeyword() {
+      this.keyword = ""
+    }
   },
+  mounted() {
+    // 通过全局事件总线绑定一个自定义事件，用来监听清空输入框中的内容
+    this.$bus.$on("clearKeyword", this.clearKeyword)
+  },
+  beforeDestroy() {
+    // 销毁之前解绑自定义事件
+    this.$bus.$off('clearKeyword')
+  }
 }
 </script>
 

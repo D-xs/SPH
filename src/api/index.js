@@ -12,6 +12,17 @@ export const reqCategoryList = () => {
   })
 }
 
+// 获取search搜索页数据
+// /api/list  post 带参数 至少为一个 {}
+export const reqSearchInfo = (params) => {
+  // 发送请求, 返回结果为Promise对象
+  return requests({
+    url: '/list',
+    method: 'post',
+    data: params
+  })
+}
+
 // 获取首页Floor组件数据
 export const reqFloorList = () => {
   return mockRequest({
