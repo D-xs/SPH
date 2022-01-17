@@ -23,7 +23,7 @@
               <img :src="floor.imgUrl" />
             </div>
             <div class="floorBanner">
-              <Carousel :carouselList="floor.carouselList"/>
+              <Carousel :carouselList="floor.carouselList" />
             </div>
             <div class="split">
               <span class="floor-x-line"></span>
@@ -54,7 +54,6 @@
 </template>
 
 <script>
-
 export default {
   name: "Floor",
   props: ["floor"],

@@ -76,7 +76,7 @@ export default {
     },
     clearKeyword() {
       this.keyword = ""
-    }
+    },
   },
   mounted() {
     // 通过全局事件总线绑定一个自定义事件，用来监听清空输入框中的内容
@@ -84,8 +84,8 @@ export default {
   },
   beforeDestroy() {
     // 销毁之前解绑自定义事件
-    this.$bus.$off('clearKeyword')
-  }
+    this.$bus.$off("clearKeyword")
+  },
 }
 </script>
 

@@ -139,9 +139,9 @@ export default {
         } else {
           query.category3Id = category3id
         }
-        location = {name, query}
+        location = { name, query }
         // 判断当前路由对象有没有params参数。如果有, 则携带
-        if(this.$route.params) {
+        if (this.$route.params) {
           location.params = this.$route.params
         }
         this.$router.push(location)
@@ -281,7 +281,7 @@ export default {
     }
     // 定义动画时间、速率
     .sort-enter-active {
-      transition: all .5s linear;
+      transition: all 0.5s linear;
       overflow: hidden;
     }
   }

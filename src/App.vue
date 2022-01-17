@@ -8,21 +8,19 @@
 </template>
 
 <script>
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
+import Header from "@/components/Header"
+import Footer from "@/components/Footer"
 export default {
-  name: 'App',
+  name: "App",
   components: {
     Header,
-    Footer
+    Footer,
   },
   mounted() {
     // 当挂载完毕，派发action，获取三级联动数据（在这里发请求，优化：使请求只发一次）
     this.$store.dispatch("home/getCategoryList")
-  }
+  },
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

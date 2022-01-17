@@ -3,7 +3,7 @@
     <div class="sortList clearfix">
       <div class="center">
         <!--banner轮播-->
-        <Carousel :carouselList="bannerList"/>
+        <Carousel :carouselList="bannerList" />
       </div>
       <div class="right">
         <div class="news">
@@ -79,7 +79,6 @@
 </template>
 
 <script>
-
 import { mapState } from "vuex"
 export default {
   name: "ListContainer",
@@ -88,7 +87,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch("home/getBannerList")
-  }
+  },
 }
 </script>
 

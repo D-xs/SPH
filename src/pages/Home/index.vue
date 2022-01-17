@@ -5,7 +5,11 @@
     <TodayRecommend />
     <Rank />
     <Like />
-    <Floor v-for="floorItem in floorList" :key="floorItem.id" :floor="floorItem"/>
+    <Floor
+      v-for="floorItem in floorList"
+      :key="floorItem.id"
+      :floor="floorItem"
+    />
     <Brand />
   </div>
 </template>
@@ -30,7 +34,7 @@ export default {
     Brand,
   },
   computed: {
-    ...mapState('home', ['floorList']),
+    ...mapState("home", ["floorList"]),
   },
   mounted() {
     // 派发action，获取floor组件用的数据

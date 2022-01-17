@@ -31,8 +31,7 @@
               v-for="(prop, index) in searchParams.props"
               :key="index"
             >
-              {{ prop.split(":")[1]
-              }}<i @click="removeAttrValue(index)">×</i>
+              {{ prop.split(":")[1] }}<i @click="removeAttrValue(index)">×</i>
             </li>
           </ul>
         </div>
@@ -42,27 +41,33 @@
 
         <!--details-->
         <div class="details clearfix">
-          <!-- 价格结构 -->
+          <!-- 排序的结构 -->
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <li :class="{ active: isOne }" @click="toggleOrder(1)">
+                  <a
+                    >综合<span
+                      class="iconfont"
+                      :class="{
+                        'icon-paixu': isDesc,
+                        'icon-xiangshang': isAsc,
+                      }"
+                      v-show="isOne"
+                    ></span
+                  ></a>
                 </li>
-                <li>
-                  <a href="#">销量</a>
-                </li>
-                <li>
-                  <a href="#">新品</a>
-                </li>
-                <li>
-                  <a href="#">评价</a>
-                </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li :class="{ active: isTwo }" @click="toggleOrder(2)">
+                  <a
+                    >价格<span
+                      class="iconfont"
+                      :class="{
+                        'icon-paixu': isDesc,
+                        'icon-xiangshang': isAsc,
+                      }"
+                      v-show="isTwo"
+                    ></span
+                  ></a>
                 </li>
               </ul>
             </div>
@@ -108,35 +113,7 @@
             </ul>
           </div>
           <!-- 分页器 -->
-          <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li class="dotted"><span>...</span></li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div><span>共10页&nbsp;</span></div>
-            </div>
-          </div>
+          <Pagination :pageNo="searchParams.pageNo" :pageSize="searchParams.pageSize" :total="total" :continues="5" @getPageNo="getPageNo"/>
         </div>
       </div>
     </div>
@@ -165,8 +142,8 @@ export default {
         categoryName: "",
         // 搜索关键字
         keyword: "",
-        // 排序方式
-        order: "",
+        // 排序方式，默认应该是：1:desc （综合降序） 1:asc（综合升序） 2:desc（价格降序） 2:asc（价格升序）
+        order: "1:desc",
         // 当前页码
         pageNo: 1,
         // 每一页显示几条数据
@@ -179,7 +156,24 @@ export default {
     }
   },
   computed: {
-    ...mapGetters("search", ["attrsList", "goodsList", "trademarkList"]),
+    ...mapGetters("search", ["attrsList", "goodsList", "trademarkList", 'total']),
+    // 判断是按照综合排序还是价格排序
+    isOne() {
+      // 按照综合排序
+      return this.searchParams.order.indexOf("1") !== -1
+    },
+    isTwo() {
+      // 按照价格排序
+      return this.searchParams.order.indexOf("2") !== -1
+    },
+    isAsc() {
+      // 升序排列
+      return this.searchParams.order.indexOf("asc") !== -1
+    },
+    isDesc() {
+      // 降序排列
+      return this.searchParams.order.indexOf("desc") !== -1
+    },
   },
   methods: {
     getData() {
@@ -239,6 +233,27 @@ export default {
         this.getData()
       }
     },
+    // 点击切换排序
+    toggleOrder(orderNum) {
+      // orderNum: 用来区别点击的是哪一个排序项
+      // 如果升序，切换为降序
+      const orderArr = this.searchParams.order.split(':')
+      orderArr[0] = orderNum
+      if (orderArr[1] === 'asc') {
+        orderArr[1] = 'desc'
+      } else {
+        orderArr[1] = 'asc'
+      }
+      this.searchParams.order = orderArr.join(':')
+      // 发送请求
+      this.getData()
+    },
+    // 响应子组件发过来的页码，发请求
+    getPageNo(pageNo) {
+      console.log(pageNo, '被点击了');
+      this.searchParams.pageNo = pageNo
+      this.getData()
+    }
   },
   created() {
     // 在这里将data中带给服务器的参数，进行更新
@@ -390,6 +405,10 @@ export default {
             }
           }
         }
+
+        .iconfont {
+          font-size: 12px;
+        }
       }
 
       .goods-list {
@@ -511,93 +530,6 @@ export default {
                 }
               }
             }
-          }
-        }
-      }
-
-      .page {
-        width: 733px;
-        height: 66px;
-        overflow: hidden;
-        float: right;
-
-        .sui-pagination {
-          margin: 18px 0;
-
-          ul {
-            margin-left: 0;
-            margin-bottom: 0;
-            vertical-align: middle;
-            width: 490px;
-            float: left;
-
-            li {
-              line-height: 18px;
-              display: inline-block;
-
-              a {
-                position: relative;
-                float: left;
-                line-height: 18px;
-                text-decoration: none;
-                background-color: #fff;
-                border: 1px solid #e0e9ee;
-                margin-left: -1px;
-                font-size: 14px;
-                padding: 9px 18px;
-                color: #333;
-              }
-
-              &.active {
-                a {
-                  background-color: #fff;
-                  color: #e1251b;
-                  border-color: #fff;
-                  cursor: default;
-                }
-              }
-
-              &.prev {
-                a {
-                  background-color: #fafafa;
-                }
-              }
-
-              &.disabled {
-                a {
-                  color: #999;
-                  cursor: default;
-                }
-              }
-
-              &.dotted {
-                span {
-                  margin-left: -1px;
-                  position: relative;
-                  float: left;
-                  line-height: 18px;
-                  text-decoration: none;
-                  background-color: #fff;
-                  font-size: 14px;
-                  border: 0;
-                  padding: 9px 18px;
-                  color: #333;
-                }
-              }
-
-              &.next {
-                a {
-                  background-color: #fafafa;
-                }
-              }
-            }
-          }
-
-          div {
-            color: #333;
-            font-size: 14px;
-            float: right;
-            width: 241px;
           }
         }
       }

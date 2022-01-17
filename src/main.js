@@ -8,6 +8,7 @@ import router from '@/router'
 import store from '@/store'
 import TypeNav from '@/components/TypeNav'
 import Carousel from '@/components/Carousel'
+import Pagination from '@/components/Pagination'
 // 引入mockServe.js文件，使其执行，让mock的数据可以得到返回
 import './mock/mockServe'
 import { reqCategoryList } from '@/api'
@@ -18,6 +19,8 @@ Vue.config.productionTip = false
 Vue.component(TypeNav.name, TypeNav)
 // 将轮播图组件注册为全局组件
 Vue.component(Carousel.name, Carousel)
+// 将分页器注册为全局组件
+Vue.component(Pagination.name, Pagination)
 reqCategoryList()
 new Vue({
   render: h => h(App),
@@ -38,6 +41,6 @@ new Vue({
   store,
   // 安装全局事件总线
   beforeCreate() {
-		Vue.prototype.$bus = this //安装全局事件总线，$bus就是当前应用的vm
-	},
+    Vue.prototype.$bus = this //安装全局事件总线，$bus就是当前应用的vm
+  },
 }).$mount('#app')

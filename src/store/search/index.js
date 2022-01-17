@@ -34,6 +34,18 @@ const getters = {
   trademarkList(state) {
     return state.searchList.trademarkList || []
   },
+  pageNo(state) {
+    return state.searchList.pageNo
+  },
+  pageSize(state) {
+    return state.searchList.pageSize
+  },
+  total(state) {
+    return state.searchList.total
+  },
+  totalPages(state) {
+    return state.searchList.totalPages
+  },
 }
 
 export default {
