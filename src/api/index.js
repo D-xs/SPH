@@ -32,6 +32,35 @@ export const reqGoodsInfo = (skuId) => {
   })
 }
 
+// 将商品添加到购物车中（或者修改购物车中商品的个数）
+export const reqAddOrUpdateShopCart = (skuId, skuNum) => {
+  return requests({
+    url: `/cart/addToCart/${skuId}/${skuNum}`,
+    method: "post",
+  })
+}
+
+// 获取购物车的商品列表
+export const reqShopCartList = () => {
+  return requests({
+    url: '/cart/cartList',
+    method: "get",
+  })
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // 获取首页Floor组件数据
 export const reqFloorList = () => {
   return mockRequest({

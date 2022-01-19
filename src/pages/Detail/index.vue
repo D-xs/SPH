@@ -103,12 +103,22 @@
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt" />
-                <a href="javascript:" class="plus">+</a>
-                <a href="javascript:" class="mins">-</a>
+                <input
+                  autocomplete="off"
+                  class="itxt"
+                  @change="changeSkuNum"
+                  v-model.number="skuNum"
+                />
+                <a href="javascript:" class="plus" @click="skuNum++">+</a>
+                <a
+                  href="javascript:"
+                  class="mins"
+                  @click="skuNum > 1 ? skuNum-- : 1"
+                  >-</a
+                >
               </div>
               <div class="add">
-                <a href="javascript:">加入购物车</a>
+                <a @click="addToShopCar(skuInfo.id, skuNum)">加入购物车</a>
               </div>
             </div>
           </div>
@@ -353,7 +363,11 @@ import Zoom from "./Zoom/Zoom"
 
 export default {
   name: "Detail",
-
+  data() {
+    return {
+      skuNum: 1,
+    }
+  },
   components: {
     ImageList,
     Zoom,
@@ -369,6 +383,37 @@ export default {
         item.isChecked = "0"
       })
       spuSaleAttrValue.isChecked = "1"
+    },
+    // 转换用户输入的商品数量
+    changeSkuNum() {
+      if (isNaN(parseInt(this.skuNum)) || parseInt(this.skuNum) < 1) {
+        this.skuNum = 1
+      } else {
+        this.skuNum = parseInt(this.skuNum)
+      }
+    },
+    // 将商品添加到购物车
+    async addToShopCar(skuId, skuNum) {
+      // 1. 发请求，通知服务器将产品加入到数据库
+      // 2. 服务器存储成功，进行路由跳转
+      // 3. 失败，提示用户
+      const result = await this.$store.dispatch("detail/addOrUpdateShopCart", {
+        skuId,
+        skuNum,
+      })
+      if (result) {
+        // 跳转路由
+        // 将产品信息通过sessionStorage存储. 产品数量通过query参数带过去
+        sessionStorage.setItem("SKUINFO", JSON.stringify(this.skuInfo))
+        this.$router.push({
+          name: "addcartsuccess",
+          query: {
+            skuNum: this.skuNum
+          }
+        })
+      } else {
+        console.log("存储失败")
+      }
     },
   },
   mounted() {
