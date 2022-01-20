@@ -43,24 +43,54 @@ export const reqAddOrUpdateShopCart = (skuId, skuNum) => {
 // 获取购物车的商品列表
 export const reqShopCartList = () => {
   return requests({
-    url: '/cart/cartList',
+    url: "/cart/cartList",
     method: "get",
   })
 }
 
+// 根据skuId删除购物车中指定的商品
+export const reqDeleteCartBySkuId = (skuId) => {
+  return requests({
+    url: `/cart/deleteCart/${skuId}`,
+    method: "delete",
+  })
+}
 
+// 修改购物车中某个商品的选中状态
+export const reqUpdateCheckState = (skuId, isChecked) => {
+  return requests({
+    url: `/cart/checkCart/${skuId}/${isChecked}`,
+    method: "get",
+  })
+}
 
+// 发送手机验证码接口
+// /api/user/passport/sendCode/{phone}
+export const reqPhoneCode = (phone) => {
+  return requests({
+    url: `/user/passport/sendCode/${phone}`,
+    method: "get",
+  })
+}
 
+// 注册用户接口
+export const reqUserRegister = (data) => {
+  return requests({
+    url: `/user/passport/register`,
+    method: "post",
+    data
+  })
+}
 
-
-
-
-
-
-
-
-
-
+// 用户登录接口
+export const reqUserLogin = (data) => {
+  return requests({
+    url: `user/passport/login`,
+    method: "post",
+    data
+  })
+}
+// ***************************************************************************************** 以下是mockjs的接口
 // 获取首页Floor组件数据
 export const reqFloorList = () => {
   return mockRequest({

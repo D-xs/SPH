@@ -21,6 +21,7 @@
               type="checkbox"
               name="chk_list"
               :checked="cartInfoItem.isChecked"
+              @change="updateChecked(cartInfoItem.skuId, $event)"
             />
           </li>
           <li class="cart-list-con2">
@@ -58,7 +59,12 @@
             }}</span>
           </li>
           <li class="cart-list-con7">
-            <a href="#none" class="sindelet">删除</a>
+            <a
+              href="javascript:;"
+              class="sindelet"
+              @click="deleteCartBySkuId(cartInfoItem.skuId)"
+              >删除</a
+            >
             <br />
             <a href="#none">移到收藏</a>
           </li>
@@ -67,11 +73,16 @@
     </div>
     <div class="cart-tool">
       <div class="select-all">
-        <input class="chooseAll" type="checkbox" :checked="checkAllGoods" />
+        <input
+          class="chooseAll"
+          type="checkbox"
+          :checked="checkAllGoods && cartInfoList.length > 0"
+          @click="checkAllCart"
+        />
         <span>全选</span>
       </div>
       <div class="option">
-        <a href="#none">删除选中的商品</a>
+        <a href="javascript:;" @click="deleteAllCheckCart">删除选中的商品</a>
         <a href="#none">移到我的关注</a>
         <a href="#none">清除下柜商品</a>
       </div>
@@ -90,6 +101,8 @@
 </template>
 
 <script>
+// 引入节流函数，控制用户修改数量的间隔时间
+import throttle from "lodash/throttle"
 import { mapGetters } from "vuex"
 export default {
   name: "ShopCart",
@@ -102,7 +115,11 @@ export default {
     // 所有商品的总价
     total() {
       return this.cartInfoList.reduce((total, item) => {
-        return total + item.skuNum * item.skuPrice
+        if (item.isChecked) {
+          return total + item.skuNum * item.skuPrice
+        } else {
+          return total
+        }
       }, 0)
     },
     // 动态显示全选按钮
@@ -113,7 +130,8 @@ export default {
     },
   },
   methods: {
-    async handler(type, num, cartInfoItem) {
+    // (通过节流)修改商品数量
+    handler: throttle(async function (type, num, cartInfoItem) {
       // type: 用来区分是商品加减多少
       // num: 表示在原数量的差值
       // cartInfoItem: 被操作的商品对象
@@ -150,7 +168,51 @@ export default {
       if (result) {
         // 派发action，获取购物车当中的商品列表
         this.$store.dispatch("shopcart/getShopCartList")
+      } else {
+        alert("修改商品失败")
       }
+    }, 1000),
+    // 根据商品Id删除指定的Id
+    async deleteCartBySkuId(skuId) {
+      const result = await this.$store.dispatch(
+        "shopcart/deleteCartBySkuId",
+        skuId
+      )
+      // 如果删除成功，则重新发请求，获取购物车列表数据
+      if (result) {
+        this.$store.dispatch("shopcart/getShopCartList")
+      } else {
+        alert("删除商品失败")
+      }
+    },
+    // 更改商品的选中状态
+    async updateChecked(skuId, event) {
+      // 派发action，发请求，通知服务器修改指定商品的isChecked属性值,isChecked: 数字 1（选中） ： 0 （取消选中）
+      const result = await this.$store.dispatch(
+        "shopcart/updateCartCheckState",
+        { skuId, isChecked: Number(event.target.checked) }
+      )
+      // 如果修改成功，则重新获取购物车数据
+      if (result) {
+        this.$store.dispatch("shopcart/getShopCartList")
+      } else {
+        alert("修改商品状态失败")
+      }
+    },
+    // 删除全部选中的商品
+    deleteAllCheckCart() {
+      // 首先过滤出来一个所有选中状态的商品数组
+      const checkedCartInfoList = this.cartInfoList.filter((item) => {
+        return item.isChecked === 1
+      })
+      // 派发actions，用于删除所有选中的商品
+      this.$store.dispatch("shopcart/deleteAllCheckedCart", checkedCartInfoList)
+    },
+    // 选中或者不选择所有商品
+    checkAllCart(event) {
+      const isChecked = event.target.checked ? "1" : "0"
+      // 派发action，修改购物车列表商品的选中状态
+      this.$store.dispatch("shopcart/updateAllCartChecked", isChecked)
     },
   },
   mounted() {
