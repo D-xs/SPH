@@ -117,8 +117,6 @@ const router = new VueRouter({
 let count = 0
 // 添加全局前置路由导航守卫
 router.beforeEach(async (to, from, next) => {
-  count++
-  console.log(`${count}：${from.path} ===== ${to.path}`)
   // 判断用户是否登录
   // 先获取token
   let token = store.state.user.token
