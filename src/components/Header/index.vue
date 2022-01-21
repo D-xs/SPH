@@ -5,10 +5,15 @@
       <div class="container">
         <div class="loginList">
           <p>尚品汇欢迎您！</p>
-          <p>
+          <!-- 如果已经登录，则隐藏 -->
+          <p v-if="!userName">
             <span>请</span>
             <router-link to="/login">登录</router-link>
             <router-link class="register" to="register">免费注册</router-link>
+          </p>
+          <p v-else>
+            <a href="javascript:;">{{ userName }}</a>
+            <a href="javascript:;" class="register" @click="logout">退出登录</a>
           </p>
         </div>
         <div class="typeList">
@@ -59,6 +64,11 @@ export default {
       keyword: "",
     }
   },
+  computed: {
+    userName() {
+      return this.$store.state.user.userInfo.loginName
+    },
+  },
   methods: {
     // 通过编程式路由导航进行路由跳转到搜索页
     goSearch() {
@@ -77,6 +87,16 @@ export default {
     clearKeyword() {
       this.keyword = ""
     },
+    // 退出登录
+    async logout() {
+      try {
+        await this.$store.dispatch("user/userLogout")
+        // 退出成功，跳转到首页
+        this.$router.push("/home")
+      } catch (error) {
+        alert(error.message)
+      }
+    }
   },
   mounted() {
     // 通过全局事件总线绑定一个自定义事件，用来监听清空输入框中的内容

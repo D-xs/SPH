@@ -6,6 +6,8 @@ import nprogress from "nprogress";
 import 'nprogress/nprogress.css'
 // 引入获取UUID的函数
 import { getUUID } from "@/utils/uuid_token";
+// 引入store仓库
+import store from '@/store'
 // 1.利用aixos对象的create方法，创建一个axios实例(传入一个配置对象)
 // 2.request就是axios,我们自己可以配置
 const requests = axios.create({
@@ -23,6 +25,10 @@ requests.interceptors.request.use((config) => {
   nprogress.start()
   // 给请求消息的请求头添加一个 userTempId字段，用于标识游客身份
   config.headers.userTempId = getUUID()
+  // 判断仓库当中是否有token，如果有则携带token，获取用户的数据
+  if (store.state.user.token) {
+    config.headers.token = store.state.user.token
+  }
   return config
 })
 

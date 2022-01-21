@@ -78,7 +78,7 @@ export const reqUserRegister = (data) => {
   return requests({
     url: `/user/passport/register`,
     method: "post",
-    data
+    data,
   })
 }
 
@@ -87,7 +87,23 @@ export const reqUserLogin = (data) => {
   return requests({
     url: `user/passport/login`,
     method: "post",
-    data
+    data,
+  })
+}
+
+// 根据token获取用户信息
+export const reqUserInfo = () => {
+  return requests({
+    url: `/user/passport/auth/getUserInfo`,
+    method: "get",
+  })
+}
+
+// 退出登录接口
+export const reqLogout = () => {
+  return requests({
+    url: `/user/passport/logout`,
+    method: "get",
   })
 }
 // ***************************************************************************************** 以下是mockjs的接口
