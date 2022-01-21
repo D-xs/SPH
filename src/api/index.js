@@ -106,6 +106,22 @@ export const reqLogout = () => {
     method: "get",
   })
 }
+
+// 获取用户地址信息
+export const reqUserAddressInfo = () => {
+  return requests({
+    url: "/user/userAddress/auth/findUserAddressList",
+    method: "get"
+  })
+}
+
+// 获取商品清单
+export const reqOrderList = () => {
+  return requests({
+    url: "/order/auth/trade",
+    method: "get"
+  })
+}
 // ***************************************************************************************** 以下是mockjs的接口
 // 获取首页Floor组件数据
 export const reqFloorList = () => {

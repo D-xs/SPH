@@ -12,6 +12,7 @@ import Register from "@/pages/Register"
 import Detail from "@/pages/Detail"
 import AddCartSuccess from "@/pages/AddCartSuccess"
 import ShopCart from "@/pages/ShopCart"
+import Trade from "@/pages/Trade"
 import store from "@/store"
 
 // 重写push和replace方法，用来解决参数相同时跳转同一个路由会报错的bug
@@ -98,6 +99,13 @@ const routes = [
   {
     path: "/shopcart",
     component: ShopCart,
+    meta: {
+      showFooter: true,
+    },
+  },
+  {
+    path: "/trade",
+    component: Trade,
     meta: {
       showFooter: true,
     },
