@@ -34,38 +34,28 @@
       </div>
       <div class="detail">
         <h5>商品清单</h5>
-        <ul class="list clearFix">
+        <ul
+          class="list clearFix"
+          v-for="orderItem in orderInfo.detailArrayList"
+          :key="orderItem.skuId"
+        >
           <li>
-            <img src="./images/goods.png" alt="" />
+            <img
+              :src="orderItem.imgUrl"
+              alt=""
+              style="width: 100px; height: 100px"
+            />
           </li>
           <li>
             <p>
-              Apple iPhone 6s (A1700) 64G 玫瑰金色
-              移动联通电信4G手机硅胶透明防摔软壳 本色系列
+              {{ orderItem.skuName }}
             </p>
             <h4>7天无理由退货</h4>
           </li>
           <li>
-            <h3>￥5399.00</h3>
+            <h3>￥{{ orderItem.orderPrice }}.00</h3>
           </li>
-          <li>X1</li>
-          <li>有货</li>
-        </ul>
-        <ul class="list clearFix">
-          <li>
-            <img src="./images/goods.png" alt="" />
-          </li>
-          <li>
-            <p>
-              Apple iPhone 6s (A1700) 64G 玫瑰金色
-              移动联通电信4G手机硅胶透明防摔软壳 本色系列
-            </p>
-            <h4>7天无理由退货</h4>
-          </li>
-          <li>
-            <h3>￥5399.00</h3>
-          </li>
-          <li>X1</li>
+          <li>X{{ orderItem.skuNum }}</li>
           <li>有货</li>
         </ul>
       </div>
@@ -74,6 +64,7 @@
         <textarea
           placeholder="建议留言前先与商家沟通确认"
           class="remarks-cont"
+          v-model="msg"
         ></textarea>
       </div>
       <div class="line"></div>
@@ -86,8 +77,11 @@
     <div class="money clearFix">
       <ul>
         <li>
-          <b><i>1</i>件商品，总商品金额</b>
-          <span>¥5399.00</span>
+          <b
+            ><i>{{ orderInfo.totalNum }}</i
+            >件商品，总商品金额</b
+          >
+          <span>¥{{ orderInfo.totalAmount }}.00</span>
         </li>
         <li>
           <b>返现：</b>
@@ -100,7 +94,9 @@
       </ul>
     </div>
     <div class="trade">
-      <div class="price">应付金额:　<span>¥5399.00</span></div>
+      <div class="price">
+        应付金额:　<span>¥{{ orderInfo.totalAmount }}.00</span>
+      </div>
       <div class="receiveInfo">
         寄送至:
         <span>{{ userDefaultAddressInfo.fullAddress }}</span>
@@ -109,7 +105,7 @@
       </div>
     </div>
     <div class="sub clearFix">
-      <router-link class="subBtn" to="/pay">提交订单</router-link>
+      <a class="subBtn" @click="submitOrder">提交订单</a>
     </div>
   </div>
 </template>
@@ -118,8 +114,14 @@
 import { mapState } from "vuex"
 export default {
   name: "Trade",
+  data() {
+    return {
+      msg: "",
+      orderId: ""
+    }
+  },
   computed: {
-    ...mapState("trade", ["userAddressInfo"]),
+    ...mapState("trade", ["userAddressInfo", "orderInfo"]),
     // 获取默认地址信息
     userDefaultAddressInfo() {
       return this.userAddressInfo.find((item) => item.isDefault == "1") || {}
@@ -132,6 +134,37 @@ export default {
         item.isDefault = "0"
       })
       address.isDefault = "1"
+    },
+    // 提交订单
+    async submitOrder() {
+      // 整理参数
+      // 交易编号
+      const { tradeNo } = this.orderInfo
+      const data = {
+        // 最终收货人的姓名
+        consignee: this.userDefaultAddressInfo.consignee,
+        // 电话
+        consigneeTel: this.userDefaultAddressInfo.phoneNum,
+        // 地址
+        deliveryAddress: this.userDefaultAddressInfo.fullAddress,
+        // 交易方式： 在线交易
+        paymentWay: "ONLINE",
+        // 客户留言
+        orderComment: this.msg,
+        // 商品对象数组
+        orderDetailList: this.orderInfo.detailArrayList
+      }
+      console.log(tradeNo);
+      console.log(data);
+      const result = await this.$API.reqSubmitOrder(tradeNo, data)
+      console.log(result);
+      // 提交成功，将订单的ID存储，并携带，跳转路由
+      if(result.code === 200) {
+        this.orderId = result.data
+        this.$router.push("/pay?orderId="+this.orderId)
+      } else {
+        alert(result.message)
+      }
     },
   },
   mounted() {
@@ -282,10 +315,18 @@ export default {
       .list {
         display: flex;
         justify-content: space-between;
-
+        margin-top: 10px;
         li {
           line-height: 30px;
-
+          &:nth-child(2) {
+            width: 600px;
+          }
+          &:nth-child(3) {
+            width: 70px;
+          }
+          &:nth-child(4) {
+            width: 22px;
+          }
           p {
             margin-bottom: 20px;
           }

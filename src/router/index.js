@@ -13,6 +13,11 @@ import Detail from "@/pages/Detail"
 import AddCartSuccess from "@/pages/AddCartSuccess"
 import ShopCart from "@/pages/ShopCart"
 import Trade from "@/pages/Trade"
+import Pay from "@/pages/Pay"
+import PaySuccess from "@/pages/PaySuccess"
+import Center from "@/pages/Center"
+import MyOrder from "@/pages/Center/MyOrder"
+import GroupOrder from "@/pages/Center/GroupOrder"
 import store from "@/store"
 
 // 重写push和replace方法，用来解决参数相同时跳转同一个路由会报错的bug
@@ -109,6 +114,38 @@ const routes = [
     meta: {
       showFooter: true,
     },
+  },
+  {
+    path: "/pay",
+    component: Pay,
+    meta: {
+      showFooter: true,
+    },
+  },
+  {
+    path: "/paysuccess",
+    component: PaySuccess,
+    meta: {
+      showFooter: true,
+    },
+  },
+  {
+    path: "/center",
+    redirect: "/center/myorder",
+    component: Center,
+    meta: {
+      showFooter: true,
+    },
+    children: [
+      {
+        path: "myorder",
+        component: MyOrder
+      },
+      {
+        path: "grouporder",
+        component: GroupOrder
+      },
+    ]
   },
 ]
 

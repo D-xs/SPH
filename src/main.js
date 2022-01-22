@@ -11,7 +11,10 @@ import Carousel from '@/components/Carousel'
 import Pagination from '@/components/Pagination'
 // 引入mockServe.js文件，使其执行，让mock的数据可以得到返回
 import './mock/mockServe'
-import { reqCategoryList } from '@/api'
+// 引入所有的接口请求函数
+import * as API from '@/api'
+// 引入element-ui
+import "@/utils/element"
 // 关闭Vue的生产提示
 Vue.config.productionTip = false
 
@@ -21,7 +24,7 @@ Vue.component(TypeNav.name, TypeNav)
 Vue.component(Carousel.name, Carousel)
 // 将分页器注册为全局组件
 Vue.component(Pagination.name, Pagination)
-reqCategoryList()
+
 new Vue({
   render: h => h(App),
   // 注册路由器，ES6属性简写形式，==》 'router': router
@@ -41,6 +44,9 @@ new Vue({
   store,
   // 安装全局事件总线
   beforeCreate() {
-    Vue.prototype.$bus = this //安装全局事件总线，$bus就是当前应用的vm
+    // 安装全局事件总线，$bus就是当前应用的vm
+    Vue.prototype.$bus = this,
+    // 将所有的接口请求函数，挂载到Vue原型对象上
+    Vue.prototype.$API = API
   },
 }).$mount('#app')

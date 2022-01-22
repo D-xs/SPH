@@ -122,6 +122,31 @@ export const reqOrderList = () => {
     method: "get"
   })
 }
+
+// 提交订单
+export const reqSubmitOrder = (tradeNo, data) => {
+  return requests({
+    url: `/order/auth/submitOrder?tradeNo=${tradeNo}`,
+    method: "post",
+    data
+  })
+}
+
+// 获取支付信息
+export const reqPayInfo = (orderId) => {
+  return requests({
+    url: `/payment/weixin/createNative/${orderId}`,
+    method: "get",
+  })
+}
+
+// 获取支付状态API接口
+export const reqPayStatus = (orderId) => {
+  return requests({
+    url: `/payment/weixin/queryPayStatus/${orderId}`,
+    method: "get",
+  })
+}
 // ***************************************************************************************** 以下是mockjs的接口
 // 获取首页Floor组件数据
 export const reqFloorList = () => {
