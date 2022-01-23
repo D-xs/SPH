@@ -5,7 +5,11 @@
       <div class="value logos">
         <!-- 品牌的地方 -->
         <ul class="logo-list">
-          <li v-for="trademark in trademarkList" :key="trademark.tmId" @click="trademarkHandler(trademark)">
+          <li
+            v-for="trademark in trademarkList"
+            :key="trademark.tmId"
+            @click="trademarkHandler(trademark)"
+          >
             {{ trademark.tmName }}
           </li>
         </ul>
@@ -25,7 +29,9 @@
           <li
             v-for="(attrValueItem, index) in attrItem.attrValueList"
             :key="index"
-            @click="sendAttrInfo(attrItem.attrId, attrItem.attrName, attrValueItem)"
+            @click="
+              sendAttrInfo(attrItem.attrId, attrItem.attrName, attrValueItem)
+            "
           >
             <a>{{ attrValueItem }}</a>
           </li>
@@ -47,13 +53,13 @@ export default {
     // 品牌的处理函数
     trademarkHandler(trademark) {
       // 将品牌参数传递过去,通知父组件发请求
-      this.$emit('trademarkInfo', `${trademark.tmId}:${trademark.tmName}`)
+      this.$emit("trademarkInfo", `${trademark.tmId}:${trademark.tmName}`)
     },
     // 点击对应的售卖属性值通知父组件发送请求
     sendAttrInfo(id, name, value) {
       const str = `${id}:${value}:${name}`
-      this.$emit('attrInfo', str)
-    }
+      this.$emit("attrInfo", str)
+    },
   },
 }
 </script>

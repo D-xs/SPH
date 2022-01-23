@@ -2,14 +2,14 @@ import { reqSearchInfo } from "@/api"
 
 // state: 存储数据的对象
 const state = {
-  searchList: {}
+  searchList: {},
 }
 
 // mutations: 修改状态的对象
 const mutations = {
   GET_SEARCH_INFO(state, value) {
     state.searchList = value
-  }
+  },
 }
 
 // actions: 处理aciton，书写自己的业务逻辑，一般在此发送异步请求
@@ -17,9 +17,9 @@ const actions = {
   async getSearchInfo({ commit }, params = {}) {
     const result = await reqSearchInfo(params)
     if (result.code === 200) {
-      commit('GET_SEARCH_INFO', result.data)
+      commit("GET_SEARCH_INFO", result.data)
     }
-  }
+  },
 }
 
 // getters: 用于简化state当中的数据，可以当做计算属性
@@ -54,5 +54,5 @@ export default {
   state,
   mutations,
   actions,
-  getters
+  getters,
 }

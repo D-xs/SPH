@@ -141,17 +141,17 @@ export default {
             // type: 区分点击的哪个按钮
             // instance: 消息框的实例
             // done: 函数,调用关闭消息框
-            console.log(type === "confirm");
-            if(type === "confirm") {
+            console.log(type === "confirm")
+            if (type === "confirm") {
               // 开后门，直接跳转路由
               // if(this.code === 200) {
-                // 关闭定时器
-                clearInterval(this.timer)
-                this.timer = null
-                // 关闭弹出框
-                done()
-                // 跳转路由
-                this.$router.push("/paysuccess")
+              // 关闭定时器
+              clearInterval(this.timer)
+              this.timer = null
+              // 关闭弹出框
+              done()
+              // 跳转路由
+              this.$router.push("/paysuccess")
               // }
             } else {
               // 支付遇到问题
@@ -162,7 +162,7 @@ export default {
               done()
               alert("请联系管理员豪哥")
             }
-          }
+          },
         })
         // 支付成功,跳转路由;支付失败,提示信息
         // 开启一个循环定时器一直发请求，获取支付状态

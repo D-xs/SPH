@@ -8,7 +8,7 @@ export const getUUID = () => {
   } else {
     // 如果没有就生成uuid，存储到本地存储，返回uuid
     const uuid = uuidv4()
-    localStorage.setItem('uuid_token', uuid)
+    localStorage.setItem("uuid_token", uuid)
     return uuid
   }
 }

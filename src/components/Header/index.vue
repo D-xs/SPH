@@ -17,8 +17,12 @@
           </p>
         </div>
         <div class="typeList">
-          <a href="###">我的订单</a>
-          <a href="###">我的购物车</a>
+          <router-link href="javacsript:;" to="/center/myorder"
+            >我的订单</router-link
+          >
+          <router-link href="javacsript:;" to="/shopcart"
+            >我的购物车</router-link
+          >
           <a href="###">我的尚品汇</a>
           <a href="###">尚品汇会员</a>
           <a href="###">企业采购</a>
@@ -96,7 +100,7 @@ export default {
       } catch (error) {
         alert(error.message)
       }
-    }
+    },
   },
   mounted() {
     // 通过全局事件总线绑定一个自定义事件，用来监听清空输入框中的内容

@@ -4,10 +4,8 @@
 
 <script>
 export default {
-  name: "GroupOrder"
+  name: "GroupOrder",
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

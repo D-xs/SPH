@@ -2,7 +2,7 @@ import { reqOrderList, reqUserAddressInfo } from "../../api"
 
 const state = {
   userAddressInfo: [],
-  orderInfo: {}
+  orderInfo: {},
 }
 
 const mutations = {
@@ -11,12 +11,12 @@ const mutations = {
   },
   GET_ORDER_LIST(state, value) {
     state.orderInfo = value
-  }
+  },
 }
 
 const actions = {
   // 获取用户地址信息
-  async getUserAddressInfo({commit}) {
+  async getUserAddressInfo({ commit }) {
     const result = await reqUserAddressInfo()
     if (result.code === 200) {
       commit("GET_USER_ADDRESS_INFO", result.data)
@@ -28,17 +28,15 @@ const actions = {
     if (result.code === 200) {
       commit("GET_ORDER_LIST", result.data)
     }
-  }
+  },
 }
 
-const getters = {
-
-}
+const getters = {}
 
 export default {
   namespaced: true,
   state,
   mutations,
   actions,
-  getters
+  getters,
 }

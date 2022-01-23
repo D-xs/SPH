@@ -408,8 +408,8 @@ export default {
         this.$router.push({
           name: "addcartsuccess",
           query: {
-            skuNum: this.skuNum
-          }
+            skuNum: this.skuNum,
+          },
         })
       } else {
         console.log("存储失败")

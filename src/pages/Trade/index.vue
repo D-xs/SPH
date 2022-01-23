@@ -117,7 +117,7 @@ export default {
   data() {
     return {
       msg: "",
-      orderId: ""
+      orderId: "",
     }
   },
   computed: {
@@ -152,16 +152,16 @@ export default {
         // 客户留言
         orderComment: this.msg,
         // 商品对象数组
-        orderDetailList: this.orderInfo.detailArrayList
+        orderDetailList: this.orderInfo.detailArrayList,
       }
-      console.log(tradeNo);
-      console.log(data);
+      console.log(tradeNo)
+      console.log(data)
       const result = await this.$API.reqSubmitOrder(tradeNo, data)
-      console.log(result);
+      console.log(result)
       // 提交成功，将订单的ID存储，并携带，跳转路由
-      if(result.code === 200) {
+      if (result.code === 200) {
         this.orderId = result.data
-        this.$router.push("/pay?orderId="+this.orderId)
+        this.$router.push("/pay?orderId=" + this.orderId)
       } else {
         alert(result.message)
       }

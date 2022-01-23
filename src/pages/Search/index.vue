@@ -81,7 +81,7 @@
                   <div class="p-img">
                     <!-- 在点击图片的时候进行路由跳转，携带params参数，跳转到商品详情页面 -->
                     <router-link :to="`/detail/${good.id}`"
-                      ><img :src="good.defaultImg"
+                      ><img v-lazy="good.defaultImg"
                     /></router-link>
                   </div>
                   <div class="price">
@@ -114,7 +114,13 @@
             </ul>
           </div>
           <!-- 分页器 -->
-          <Pagination :pageNo="searchParams.pageNo" :pageSize="searchParams.pageSize" :total="total" :continues="5" @getPageNo="getPageNo"/>
+          <Pagination
+            :pageNo="searchParams.pageNo"
+            :pageSize="searchParams.pageSize"
+            :total="total"
+            :continues="5"
+            @getPageNo="getPageNo"
+          />
         </div>
       </div>
     </div>
@@ -157,7 +163,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters("search", ["attrsList", "goodsList", "trademarkList", 'total']),
+    ...mapGetters("search", [
+      "attrsList",
+      "goodsList",
+      "trademarkList",
+      "total",
+    ]),
     // 判断是按照综合排序还是价格排序
     isOne() {
       // 按照综合排序
@@ -238,23 +249,22 @@ export default {
     toggleOrder(orderNum) {
       // orderNum: 用来区别点击的是哪一个排序项
       // 如果升序，切换为降序
-      const orderArr = this.searchParams.order.split(':')
+      const orderArr = this.searchParams.order.split(":")
       orderArr[0] = orderNum
-      if (orderArr[1] === 'asc') {
-        orderArr[1] = 'desc'
+      if (orderArr[1] === "asc") {
+        orderArr[1] = "desc"
       } else {
-        orderArr[1] = 'asc'
+        orderArr[1] = "asc"
       }
-      this.searchParams.order = orderArr.join(':')
+      this.searchParams.order = orderArr.join(":")
       // 发送请求
       this.getData()
     },
     // 响应子组件发过来的页码，发请求
     getPageNo(pageNo) {
-      console.log(pageNo, '被点击了');
       this.searchParams.pageNo = pageNo
       this.getData()
-    }
+    },
   },
   created() {
     // 在这里将data中带给服务器的参数，进行更新

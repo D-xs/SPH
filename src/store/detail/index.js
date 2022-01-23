@@ -4,7 +4,7 @@ import { getUUID } from "@/utils/uuid_token"
 
 const state = {
   goodsInfo: {},
-  uuid: getUUID()
+  uuid: getUUID(),
 }
 
 const mutations = {
@@ -24,7 +24,7 @@ const actions = {
   // 将商品添加到购物车中
   // 添加成功后，服务器返回一个code为200的响应对象
   // 不需要将数据添加到仓库当中
-  addOrUpdateShopCart( _, { skuId, skuNum }) {
+  addOrUpdateShopCart(_, { skuId, skuNum }) {
     return new Promise(async (resolve, reject) => {
       const result = await reqAddOrUpdateShopCart(skuId, skuNum)
       if (result.code === 200) {

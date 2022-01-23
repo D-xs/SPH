@@ -48,7 +48,6 @@ export default {
     skuImageList() {
       this.$nextTick(() => {
         new Swiper(".swiper-container", {
-
           // 如果需要前进后退按钮
           navigation: {
             nextEl: ".swiper-button-next",
@@ -91,7 +90,6 @@ export default {
         border: 2px solid #f60;
         padding: 1px;
       }
-
     }
   }
 

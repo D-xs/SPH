@@ -28,7 +28,7 @@ const mutations = {
     state.token = ""
     state.userInfo = {}
     removeToken()
-  }
+  },
 }
 
 const actions = {
@@ -79,7 +79,7 @@ const actions = {
     }
   },
   // 退出登录
-  async userLogout({ commit}) {
+  async userLogout({ commit }) {
     const result = await reqLogout()
     if (result.code === 200) {
       // 退出成功
@@ -89,7 +89,7 @@ const actions = {
     } else {
       return Promise.reject(new Error("退出失败"))
     }
-  }
+  },
 }
 
 const getters = {}

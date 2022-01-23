@@ -5,21 +5,35 @@ import VueRouter from "vue-router"
 // 应用vue-router插件
 Vue.use(VueRouter)
 // 引入路由组件
-import Home from "@/pages/Home"
-import Search from "@/pages/Search"
-import Login from "@/pages/Login"
-import Register from "@/pages/Register"
-import Detail from "@/pages/Detail"
-import AddCartSuccess from "@/pages/AddCartSuccess"
-import ShopCart from "@/pages/ShopCart"
-import Trade from "@/pages/Trade"
-import Pay from "@/pages/Pay"
-import PaySuccess from "@/pages/PaySuccess"
-import Center from "@/pages/Center"
-import MyOrder from "@/pages/Center/MyOrder"
-import GroupOrder from "@/pages/Center/GroupOrder"
+// import Home from "@/pages/Home"
+// import Search from "@/pages/Search"
+// import Login from "@/pages/Login"
+// import Register from "@/pages/Register"
+// import Detail from "@/pages/Detail"
+// import AddCartSuccess from "@/pages/AddCartSuccess"
+// import ShopCart from "@/pages/ShopCart"
+// import Trade from "@/pages/Trade"
+// import Pay from "@/pages/Pay"
+// import PaySuccess from "@/pages/PaySuccess"
+// import Center from "@/pages/Center"
+// import MyOrder from "@/pages/Center/MyOrder"
+// import GroupOrder from "@/pages/Center/GroupOrder"
 import store from "@/store"
 
+// 通过路由懒加载的方式，提高应用的性能
+const Home = () => import("@/pages/Home")
+const Search = () => import("@/pages/Search")
+const Login = () => import("@/pages/Login")
+const Register = () => import("@/pages/Register")
+const Detail = () => import("@/pages/Detail")
+const AddCartSuccess = () => import("@/pages/AddCartSuccess")
+const ShopCart = () => import("@/pages/ShopCart")
+const Trade = () => import("@/pages/Trade")
+const Pay = () => import("@/pages/Pay")
+const PaySuccess = () => import("@/pages/PaySuccess")
+const Center = () => import("@/pages/Center")
+const MyOrder = () => import("@/pages/Center/MyOrder")
+const GroupOrder = () => import("@/pages/Center/GroupOrder")
 // 重写push和replace方法，用来解决参数相同时跳转同一个路由会报错的bug
 
 let originPush = VueRouter.prototype.push
@@ -111,6 +125,13 @@ const routes = [
   {
     path: "/trade",
     component: Trade,
+    beforeEnter: (to, from, next) => {
+      if (from.path === "/shopcart") {
+        next()
+      } else {
+        next(from.path)
+      }
+    },
     meta: {
       showFooter: true,
     },
@@ -118,6 +139,13 @@ const routes = [
   {
     path: "/pay",
     component: Pay,
+    beforeEnter: (to, from, next) => {
+      if (from.path === "/trade") {
+        next()
+      } else {
+        next(from.path)
+      }
+    },
     meta: {
       showFooter: true,
     },
@@ -125,6 +153,13 @@ const routes = [
   {
     path: "/paysuccess",
     component: PaySuccess,
+    beforeEnter: (to, from, next) => {
+      if (from.path === "/pay") {
+        next()
+      } else {
+        next(from.path)
+      }
+    },
     meta: {
       showFooter: true,
     },
@@ -139,13 +174,13 @@ const routes = [
     children: [
       {
         path: "myorder",
-        component: MyOrder
+        component: MyOrder,
       },
       {
         path: "grouporder",
-        component: GroupOrder
+        component: GroupOrder,
       },
-    ]
+    ],
   },
 ]
 
@@ -158,7 +193,6 @@ const router = new VueRouter({
     return { y: 0 }
   },
 })
-
 
 // 添加全局前置路由导航守卫
 router.beforeEach(async (to, from, next) => {
@@ -193,9 +227,16 @@ router.beforeEach(async (to, from, next) => {
       }
     }
   } else {
-    // 如果没有登录，想要去购物车，则需要让用户先登录再去购物车
-    // 待完成
-    next()
+    // 如果没有登录，想要去支付页，个人中心，支付成功页，则需要让用户先登录再去
+    if (
+      to.path.indexOf("trade") !== -1 ||
+      to.path.indexOf("pay") !== -1 ||
+      to.path.indexOf("center") !== -1
+    ) {
+      next("./login?redirect=" + to.path)
+    } else {
+      next()
+    }
   }
 })
 export default router
